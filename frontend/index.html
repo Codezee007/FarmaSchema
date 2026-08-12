@@ -20,6 +20,7 @@
       <nav class="site-nav">
         <a href="dashboard.html">Find schemes</a>
         <a href="scheme.html">Browse all schemes</a>
+        <a href="admin.html">Admin</a>
       </nav>
     </div>
   </header>
@@ -27,18 +28,20 @@
   <section class="hero">
     <div class="container">
       <span class="eyebrow">🌱 Built for small and marginal farmers</span>
-      <h1>Find agricultural schemes meant for you</h1>
+      <h1 data-i18n="homeTitle">Find agricultural schemes meant for you</h1>
       <p class="lede">
         Enter your farming profile — state, crop, land size and category —
         and FarmaSchema ranks government schemes by how relevant they are
         to you, and explains exactly why.
       </p>
       <div class="hero-actions">
-        <a href="dashboard.html" class="btn btn-primary">Find government schemes</a>
-        <a href="scheme.html" class="btn btn-secondary">Browse all schemes</a>
+        <a href="dashboard.html" class="btn btn-primary" data-i18n="homeFind">Find government schemes</a>
+        <a href="scheme.html" class="btn btn-secondary" data-i18n="browse">Browse all schemes</a>
       </div>
     </div>
   </section>
+
+  <section class="section" style="padding-top:0;"><div class="container"><div class="card home-language"><h2 data-i18n="chooseLanguage">Choose your language</h2><p data-i18n="chooseLanguageHelp">Choose a language or select your state on the map.</p><button type="button" class="btn btn-secondary" id="home-language-button" data-i18n="selectLanguage">Select language</button></div></div></section>
 
   <section class="section">
     <div class="container">
@@ -86,6 +89,6 @@
     </div>
   </footer>
 
-  <script src="js/app.js"></script>
+  <script src="js/app.js"></script><script src="js/i18n.js"></script><script>FarmaSchema.mountFarmerControls();document.getElementById('home-language-button').onclick=()=>document.querySelector('.header-language').click()</script>
 </body>
 </html>

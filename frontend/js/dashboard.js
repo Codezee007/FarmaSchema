@@ -41,14 +41,16 @@
 
   function readProfileFromForm() {
     const formData = new FormData(form);
-    const landSizeRaw = formData.get("land_size");
+    const landCategory = (formData.get("land_category") || "").split("|");
 
     return {
       state: (formData.get("state") || "").trim(),
       district: (formData.get("district") || "").trim(),
       crop: (formData.get("crop") || "").trim(),
-      land_size: landSizeRaw === "" ? null : Number(landSizeRaw),
-      category: (formData.get("category") || "").trim(),
+      // The one land-holding dropdown keeps the existing API shape. Its
+      // representative acres value is used only for the current range check.
+      land_size: landCategory[1] ? Number(landCategory[1]) : null,
+      category: (landCategory[0] || "").trim(),
       irrigation: formData.get("irrigation") || "",
       details: (formData.get("details") || "").trim(),
     };
@@ -60,12 +62,12 @@
 
     if (!profile.state) { errors.push("state"); markFieldError("state"); }
     if (!profile.crop) { errors.push("crop"); markFieldError("crop"); }
-    if (!profile.category) { errors.push("category"); markFieldError("category"); }
+    if (!profile.category) { errors.push("land_category"); markFieldError("land_category"); }
     if (!profile.irrigation) { errors.push("irrigation"); markFieldError("irrigation"); }
 
     if (profile.land_size === null || Number.isNaN(profile.land_size) || profile.land_size < 0) {
-      errors.push("land_size");
-      markFieldError("land_size");
+      errors.push("land_category");
+      markFieldError("land_category");
     }
 
     return errors;
@@ -76,7 +78,6 @@
       profile.state,
       profile.district,
       profile.crop,
-      `${profile.land_size} acres`,
       profile.category,
       profile.irrigation === "Yes" ? "Irrigated" : "Not irrigated",
     ].filter(Boolean);
@@ -97,7 +98,9 @@
   }
 
   function renderResults(recommendations) {
-    resultsCount.textContent = `${recommendations.length} schemes, ranked by relevance`;
+    resultsCount.textContent = FarmaI18n.lang() === "kn"
+      ? `${recommendations.length} ಯೋಜನೆಗಳು, ಹೊಂದಾಣಿಕೆಯ ಆಧಾರದಲ್ಲಿ ಶ್ರೇಯಾಂಕಿಸಲಾಗಿದೆ`
+      : `${recommendations.length} schemes, ranked by relevance`;
 
     if (recommendations.length === 0) {
       resultsContainer.innerHTML = `
@@ -108,7 +111,8 @@
       return;
     }
 
-    resultsContainer.innerHTML = recommendations.map((rec) => {
+    resultsContainer.innerHTML = recommendations.map((originalRec) => {
+      const rec = FarmaI18n.localizeScheme(originalRec);
       const percent = FarmaSchema.scorePercent(rec.relevance_score);
       const fillClass = FarmaSchema.relevanceFillClass(rec.relevance_score);
       const isBookmarked = bookmarkedIds.has(rec.id);
@@ -124,19 +128,19 @@
               ${isBookmarked ? "★" : "☆"}
             </button>
             <div class="relevance-block">
-              <div class="relevance-label">Relevance</div>
+              <div class="relevance-label">${FarmaI18n.t("relevance")}</div>
               <div class="relevance-value">${percent}%</div>
               <div class="relevance-bar"><div class="relevance-fill ${fillClass}" style="width:${percent}%"></div></div>
             </div>
           </div>
 
           <details class="why-box">
-            <summary>Why this scheme?</summary>
+            <summary>${FarmaI18n.t("why")}</summary>
             <ul class="attr-list">${attrListHtml(rec.matched_attributes, rec.unknown_or_missing)}</ul>
           </details>
 
           <div class="scheme-card-actions">
-            <a class="btn btn-primary" href="scheme.html?id=${encodeURIComponent(rec.id)}">View details</a>
+            <a class="btn btn-primary" href="scheme.html?id=${encodeURIComponent(rec.id)}">${FarmaI18n.t("view")}</a>
           </div>
         </article>`;
     }).join("");
@@ -253,4 +257,9 @@
       // Ignore malformed saved data.
     }
   })();
+  window.addEventListener("farmaschema:languagechange", () => {
+    const saved = localStorage.getItem("farmaschema_last_recommend");
+    if (!saved) return;
+    try { renderResults(JSON.parse(saved).recommendations || []); } catch (e) { /* malformed cache */ }
+  });
 })();

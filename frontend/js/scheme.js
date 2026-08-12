@@ -20,6 +20,7 @@
   } else {
     showBrowseView();
   }
+  window.addEventListener("farmaschema:languagechange", () => window.location.reload());
 
   // ---------------------------------------------------------------------
   // Browse mode
@@ -33,16 +34,15 @@
       const data = await FarmaSchema.apiRequest("/api/schemes");
       const schemes = data.schemes || [];
 
-      grid.innerHTML = schemes.map((s) => `
+      grid.innerHTML = schemes.map((original) => { const s = FarmaI18n.localizeScheme(original); return `
         <article class="card">
           <h3 style="font-size:17px;">${escapeHtml(s.name)}</h3>
           <p style="color:var(--color-text-muted); font-size:14.5px;">${escapeHtml(s.short_description)}</p>
           <div style="display:flex; gap:10px; margin-top:10px;">
-            <a class="btn btn-primary" href="scheme.html?id=${encodeURIComponent(s.id)}">View details</a>
-            <a class="btn btn-ghost" href="${escapeAttr(s.official_url)}" target="_blank" rel="noopener">Official site ↗</a>
+            <a class="btn btn-primary" href="scheme.html?id=${encodeURIComponent(s.id)}">${FarmaI18n.t("view")}</a>
+            <a class="btn btn-ghost" href="${escapeAttr(s.official_url)}" target="_blank" rel="noopener">${FarmaI18n.lang() === "kn" ? "ಅಧಿಕೃತ ಜಾಲತಾಣ ↗" : "Official site ↗"}</a>
           </div>
-        </article>
-      `).join("");
+        </article>`; }).join("");
 
       loading.style.display = "none";
       grid.style.display = "grid";
@@ -82,6 +82,7 @@
   }
 
   function renderDetail(scheme) {
+    scheme = FarmaI18n.localizeScheme(scheme);
     document.title = `${scheme.name} — FarmaSchema`;
     document.getElementById("detail-name").textContent = scheme.name;
     document.getElementById("detail-short").textContent = scheme.short_description;

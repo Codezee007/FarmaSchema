@@ -20,6 +20,7 @@
       <nav class="site-nav">
         <a href="dashboard.html">Find schemes</a>
         <a href="scheme.html">Browse all schemes</a>
+        <a href="admin.html">Admin</a>
       </nav>
     </div>
   </header>
@@ -27,17 +28,17 @@
   <section class="section" style="padding-bottom:0;">
     <div class="container">
       <div class="section-heading" style="margin-bottom:28px;">
-        <h2>Your farming profile</h2>
-        <p>Fill this in once — we'll rank schemes against it right away.</p>
+          <h2 data-i18n="profile">Your farming profile</h2>
+        <p data-i18n="profileHelp">Fill this in once — we'll rank schemes against it right away.</p>
       </div>
 
       <form id="profile-form" class="card" novalidate>
         <div class="form-grid">
 
           <div class="form-field" data-field="state">
-            <label for="state">State *</label>
+            <label for="state"><span data-i18n="state">State</span> *</label>
             <select id="state" name="state">
-              <option value="">Select your state</option>
+              <option value="" data-i18n="selectState">Select your state</option>
               <option>Andhra Pradesh</option><option>Arunachal Pradesh</option>
               <option>Assam</option><option>Bihar</option><option>Chhattisgarh</option>
               <option>Goa</option><option>Gujarat</option><option>Haryana</option>
@@ -53,14 +54,14 @@
           </div>
 
           <div class="form-field" data-field="district">
-            <label for="district">District <span class="hint">(optional)</span></label>
-            <input type="text" id="district" name="district" placeholder="e.g. Bengaluru Rural">
+            <label for="district"><span data-i18n="district">District</span> <span class="hint" data-i18n="optional">(optional)</span></label>
+            <input type="text" id="district" name="district" data-i18n-placeholder="districtPlaceholder" placeholder="e.g. Bengaluru Rural">
           </div>
 
           <div class="form-field" data-field="crop">
-            <label for="crop">Main crop *</label>
+            <label for="crop"><span data-i18n="crop">Main crop</span> *</label>
             <select id="crop" name="crop">
-              <option value="">Select your main crop</option>
+              <option value="" data-i18n="selectCrop">Select your main crop</option>
               <option>Rice</option><option>Wheat</option><option>Maize</option>
               <option>Millets</option><option>Pulses</option><option>Cotton</option>
               <option>Sugarcane</option><option>Fruits</option><option>Vegetables</option>
@@ -70,27 +71,22 @@
             <span class="field-error">Please select your main crop.</span>
           </div>
 
-          <div class="form-field" data-field="land_size">
-            <label for="land_size">Land size (in acres) *</label>
-            <input type="number" id="land_size" name="land_size" min="0" step="0.1" placeholder="e.g. 2">
-            <span class="field-error">Enter a valid land size (0 or more).</span>
-          </div>
-
-          <div class="form-field" data-field="category">
-            <label for="category">Farmer category *</label>
-            <select id="category" name="category">
-              <option value="">Select your category</option>
-              <option>Marginal Farmer</option>
-              <option>Small Farmer</option>
-              <option>Medium Farmer</option>
-              <option>Large Farmer</option>
-              <option>Landless / Tenant Farmer</option>
+          <div class="form-field" data-field="land_category">
+            <label for="land_category" data-i18n="landCategory">Land holding category</label>
+            <select id="land_category" name="land_category" aria-describedby="land-category-help">
+              <option value="" data-i18n="selectLandCategory">Select your land holding category</option>
+              <option value="Marginal Farmer|1.25" data-i18n="marginal">Marginal Farmer — below 2.5 acres (below 1 hectare)</option>
+              <option value="Small Farmer|3.75" data-i18n="small">Small Farmer — 2.5 to under 5 acres (1 to under 2 hectares)</option>
+              <option value="Semi-Medium Farmer|7.5" data-i18n="semiMedium">Semi-Medium Farmer — 5 to under 10 acres (2 to under 4 hectares)</option>
+              <option value="Medium Farmer|17.5" data-i18n="medium">Medium Farmer — 10 to 25 acres (4 to 10 hectares)</option>
+              <option value="Large Farmer|26" data-i18n="large">Large Farmer — above 25 acres (10 hectares and above)</option>
             </select>
-            <span class="field-error">Please select your farmer category.</span>
+            <span class="hint" id="land-category-help" data-i18n="landCategoryHelp">The category provides the land-size range used for matching.</span>
+            <span class="field-error" data-i18n="selectLandCategoryError">Please select your land holding category.</span>
           </div>
 
           <div class="form-field" data-field="irrigation">
-            <label>Irrigation available? *</label>
+            <label><span data-i18n="irrigation">Irrigation available?</span> *</label>
             <div class="radio-row">
               <label class="radio-pill">
                 <input type="radio" name="irrigation" value="Yes">
@@ -105,14 +101,14 @@
           </div>
 
           <div class="form-field full" data-field="details">
-            <label for="details">Anything else about your farm? <span class="hint">(optional)</span></label>
-            <textarea id="details" name="details" rows="2" placeholder="e.g. interested in organic farming, own a diesel pump, part of an FPO..."></textarea>
+            <label for="details"><span data-i18n="details">Anything else about your farm?</span> <span class="hint" data-i18n="optional">(optional)</span></label>
+            <textarea id="details" name="details" rows="2" data-i18n-placeholder="detailsPlaceholder" placeholder="e.g. interested in organic farming, own a diesel pump, part of an FPO..."></textarea>
           </div>
 
         </div>
 
         <div style="margin-top:22px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-          <button type="submit" class="btn btn-primary" id="submit-btn">Find matching schemes</button>
+          <button type="submit" class="btn btn-primary" id="submit-btn" data-i18n="submit">Find matching schemes</button>
           <span id="form-status" style="font-size:13.5px; color:var(--color-text-muted);"></span>
         </div>
       </form>
@@ -126,7 +122,7 @@
 
       <details class="how-it-works" style="cursor:pointer;">
         <summary style="cursor:pointer; list-style:none;">
-          <h3 style="display:inline; margin:0;">ℹ️ How the AI works</h3>
+          <h3 style="display:inline; margin:0;">ℹ️ <span data-i18n="aiWorks">How the AI works</span></h3>
         </summary>
         <p style="margin-top:10px;">
           Your profile is converted into text features using TF-IDF (Term
@@ -141,7 +137,7 @@
       </details>
 
       <div class="results-header">
-        <h2 id="results-title">Ranked schemes for you</h2>
+        <h2 id="results-title" data-i18n="results">Ranked schemes for you</h2>
         <span class="results-count" id="results-count"></span>
       </div>
 
@@ -172,7 +168,7 @@
     </div>
   </footer>
 
-  <script src="js/app.js"></script>
+  <script src="js/app.js"></script><script src="js/i18n.js"></script><script>FarmaSchema.mountFarmerControls()</script>
   <script src="js/dashboard.js"></script>
 </body>
 </html>

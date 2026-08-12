@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin login - FarmaSchema</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand">
+        <span class="brand-mark">FS</span>
+        <span>
+          <span class="brand-name">FarmaSchema</span>
+          <span class="brand-subtitle">Admin scheme database editor</span>
+        </span>
+      </a>
+      <nav class="site-nav">
+        <a href="dashboard.html">Find schemes</a>
+        <a href="scheme.html">Browse all schemes</a>
+        <a href="login.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container login-container">
+      <div class="section-heading admin-heading">
+        <h2>Admin login</h2>
+        <p>Enter the admin token to manage the scheme database.</p>
+      </div>
+
+      <form id="login-form" class="card login-card" novalidate>
+        <div class="form-field">
+          <label for="admin-token">Admin token</label>
+          <input type="password" id="admin-token" placeholder="Set FARMASCHEMA_ADMIN_TOKEN before deployment" autocomplete="current-password" autofocus>
+        </div>
+
+        <div class="admin-actions">
+          <button type="submit" class="btn btn-primary" id="login-btn">Log in</button>
+        </div>
+
+        <p id="login-status" class="form-hint"></p>
+      </form>
+
+      <div class="disclaimer admin-note">
+        <span class="icon">!</span>
+        <span>
+          Admin access is token-protected for local demos, not a full user/account
+          system. Set a strong <code>FARMASCHEMA_ADMIN_TOKEN</code> before any
+          deployment. For local development, the default token is
+          <code>dev-admin-token</code>.
+        </span>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>Signing in stores the token for this browser tab only (cleared on close).</span>
+      <span><a href="index.html">Back to home</a></span>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
