@@ -24,19 +24,24 @@ farmaschema/
 │   ├── index.html             Landing page
 │   ├── dashboard.html         Farmer profile form + ranked results
 │   ├── scheme.html            Browse all schemes / single scheme detail
+│   ├── login.html             Admin login page (token check)
+│   ├── admin.html             Admin page: add scheme (plain text, or advanced JSON)
 │   ├── css/
 │   │   └── style.css
 │   └── js/
-│       ├── app.js             Shared helpers (client id, API wrapper, toast)
+│       ├── app.js             Shared helpers (client id, admin token, API wrapper, toast)
 │       ├── dashboard.js        Form handling + rendering ranked results
-│       └── scheme.js           Browse grid + single scheme detail page
+│       ├── scheme.js           Browse grid + single scheme detail page
+│       ├── login.js            Admin login form
+│       └── admin.js            Add-scheme form (plain text) + advanced JSON upload/paste
 │
 ├── backend/
 │   ├── app.py                 Flask app: REST API + serves the frontend
 │   ├── recommendation.py      TF-IDF + cosine similarity + rule-based matching
 │   ├── database.py            SQLite bookmarks (no personal info required)
 │   ├── data/
-│   │   └── schemes.json       20 real central government schemes
+│   │   ├── schemes.json       Scheme database used by recommendations
+│   │   └── farmaschema.db     Local SQLite bookmarks DB (ignored by git)
 │   └── requirements.txt
 │
 ├── README.md
@@ -114,6 +119,67 @@ cd backend
 python app.py
 ```
 
+If port `5000` is already in use, you can choose another port:
+
+```powershell
+$env:PORT="5050"
+python app.py
+```
+
+---
+
+## 4.1 Admin scheme updates
+
+The admin section is available through a separate link in the site header,
+or directly at:
+
+```text
+http://127.0.0.1:5000/login.html
+```
+
+Log in with the admin token. On success the token is kept in
+`sessionStorage` for that browser tab only (closing the tab signs you
+out), and you're taken to `admin.html`.
+
+**Adding a scheme is plain text — no structured parsing.** The main admin
+form asks for exactly three things:
+
+1. Scheme name
+2. Scheme description — paste the paragraph as written on the official
+   source; it's stored exactly as typed
+3. Official website URL
+
+Nothing is auto-extracted from the description (no OCR/NLP/LLM parsing).
+The description is stored as-is and is the text the TF-IDF matching step
+uses directly. Structured fields the rest of the app expects (states,
+crops, farmer categories, etc.) get permissive defaults (`"All States"`,
+`"All Crops"`, `"All Farmers"`) so the new scheme still shows up for
+farmers instead of being silently excluded.
+
+If you need to set those structured fields precisely instead of using the
+defaults, use the **"Advanced: add structured JSON"** section further down
+the same page — it's the same two options as before (upload a `.json`
+file, or paste JSON directly), unchanged.
+
+Both the plain-text form and the advanced JSON options append to
+`backend/data/schemes.json`. The backend validates required fields,
+replaces any incoming `id` with the next numeric ID, and then saves the
+adjusted scheme data. If the current dataset has no numeric IDs yet, the
+first appended scheme starts at the current scheme count + 1.
+
+For local development, the default admin token is:
+
+```text
+dev-admin-token
+```
+
+Before a demo outside your machine or any deployment, set a stronger token:
+
+```powershell
+$env:FARMASCHEMA_ADMIN_TOKEN="your-strong-token"
+python app.py
+```
+
 ---
 
 ## 5. Verifying each part works (do these in order)
@@ -136,6 +202,12 @@ window), open a **second** PowerShell window and run:
 curl http://127.0.0.1:5000/api/health
 curl http://127.0.0.1:5000/api/schemes
 curl http://127.0.0.1:5000/api/schemes/pm-kisan
+```
+
+To test the admin API count/data endpoint:
+
+```powershell
+curl -H "X-Admin-Token: dev-admin-token" http://127.0.0.1:5000/api/admin/schemes
 ```
 
 **c) Test the full flow in the browser:**
@@ -193,6 +265,10 @@ easy to explain and easy to defend under questioning.
 | POST | `/api/recommend` | Body: farmer profile JSON → ranked recommendations |
 | POST | `/api/bookmark` | Body: `{client_id, scheme_id, action}` (`action`: `add` or `remove`) |
 | GET | `/api/bookmarks?client_id=...` | All bookmarks for that browser |
+| GET | `/api/admin/schemes` | Admin-only: return the scheme dataset |
+| POST | `/api/admin/schemes` | Admin-only: append one scheme object or an array of scheme objects |
+| PUT | `/api/admin/schemes` | Admin-only: replace the full scheme dataset |
+| POST | `/api/admin/schemes/simple` | Admin-only: plain-text add — body `{name, description, official_url}`, no parsing |
 
 ---
 
@@ -201,6 +277,10 @@ easy to explain and easy to defend under questioning.
 No Aadhaar number, phone number, bank details or password is ever
 collected. Bookmarks are tied to a random `client_id` generated in the
 browser's `localStorage` — not to any personal identifier.
+
+Local runtime files such as `backend/data/farmaschema.db`, Python
+`__pycache__/` folders, virtual environments, `.env` files and logs are
+ignored through `.gitignore`.
 
 ---
 
@@ -214,3 +294,7 @@ browser's `localStorage` — not to any personal identifier.
 * The rule-based layer is intentionally simple (state / crop / category /
   land size / irrigation) — it does not model complex real eligibility
   conditions like income ceilings or land-ownership documentation.
+* The admin section uses a lightweight token check intended for demos and
+  local development, not a full user/account permission system.
+* `debug=True` and open CORS are convenient during development, but should
+  be tightened before deployment.
