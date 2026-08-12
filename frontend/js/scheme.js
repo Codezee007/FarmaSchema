@@ -122,7 +122,9 @@
     document.getElementById("detail-relevance-value").textContent = `${percent}%`;
     const fillEl = document.getElementById("detail-relevance-fill");
     fillEl.style.width = `${percent}%`;
-    fillEl.classList.add(fillClass);
+  if (fillClass) {
+  fillEl.classList.add(fillClass);
+}
 
     document.getElementById("detail-matched").innerHTML =
       match.matched_attributes.map((m) => `<li><span class="ok">✓</span><span>${escapeHtml(m)}</span></li>`).join("");
