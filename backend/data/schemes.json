@@ -10,9 +10,18 @@
       "Certain categories are excluded, such as institutional landholders and some high-income or professional categories (see official guidelines)",
       "Land size is not the primary criterion after the 2019 expansion — most landholding families qualify"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["Marginal Farmer", "Small Farmer", "Medium Farmer", "Large Farmer"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "Marginal Farmer",
+      "Small Farmer",
+      "Medium Farmer",
+      "Large Farmer"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Open to landholding farmer families of any size, subject to exclusion criteria for certain non-farming or high-income categories.",
@@ -32,9 +41,15 @@
       "All farmers, including sharecroppers and tenant farmers, growing notified crops in notified areas",
       "Loanee farmers may be enrolled automatically through their bank; other farmers can enrol voluntarily"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No minimum or maximum land-size restriction; coverage is per notified crop and area.",
@@ -55,9 +70,15 @@
       "Members of Self-Help Groups or Joint Liability Groups of farmers",
       "Fisheries and animal husbandry farmers under the extended KCC scheme"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No fixed minimum; credit limit is based on land holding, cropping pattern and scale of finance.",
@@ -76,9 +97,15 @@
     "eligibility": [
       "Any farmer with agricultural land can request testing through the local agriculture department or Krishi Vigyan Kendra"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No restriction; applies to any size of landholding.",
@@ -98,9 +125,15 @@
       "Farmers with assured access to a water source such as a well, borewell, canal or pond",
       "Priority is often given to small and marginal farmers"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Open to all landholding sizes; subsidy percentage may vary by farmer category and state.",
@@ -120,9 +153,15 @@
       "Individual farmers, groups of farmers, cooperatives, panchayats or FPOs",
       "Availability of suitable land or an existing electric pump connection, depending on which component is applied for"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No fixed land-size restriction; requirements depend on the component (standalone pump vs. grid-connected plant) applied for.",
@@ -142,9 +181,15 @@
       "Farmers willing to form or join a cluster of the minimum required farmers or area",
       "Willingness to transition to organic practices and undergo group certification"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No individual land-size restriction, but participation is organised through farmer clusters.",
@@ -164,9 +209,15 @@
       "Eligibility depends on the specific state sub-scheme or project active under RKVY",
       "Often most relevant to farmers who are members of an FPO or cooperative"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Depends on the specific state project active under this umbrella scheme.",
@@ -185,9 +236,19 @@
     "eligibility": [
       "Farmers cultivating rice, wheat, pulses, coarse cereals or nutri-cereals in NFSM-notified districts"
     ],
-    "states": ["All States"],
-    "crops": ["Rice", "Wheat", "Pulses", "Maize", "Millets"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "Rice",
+      "Wheat",
+      "Pulses",
+      "Maize",
+      "Millets"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No fixed restriction; benefits are targeted at notified districts and crops rather than land size.",
@@ -207,9 +268,15 @@
       "Individual farmers, FPOs, cooperatives or entrepreneurs setting up Custom Hiring Centres",
       "Higher subsidy rates are often available for small, marginal, SC/ST and women farmers"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No fixed land-size restriction; small and marginal farmers often get preferential subsidy rates.",
@@ -228,9 +295,19 @@
     "eligibility": [
       "Farmers growing or planning to grow horticultural crops such as fruits, vegetables, spices or flowers"
     ],
-    "states": ["All States"],
-    "crops": ["Fruits", "Vegetables", "Spices", "Flowers", "Horticulture"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "Fruits",
+      "Vegetables",
+      "Spices",
+      "Flowers",
+      "Horticulture"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No fixed land-size restriction; applies to farmers growing horticultural crops of any scale.",
@@ -249,9 +326,15 @@
     "eligibility": [
       "Farmers or farmer groups interested in taking up beekeeping as a supplementary activity"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Not tied to land size — beekeeping can be taken up alongside any cropping pattern.",
@@ -270,9 +353,15 @@
     "eligibility": [
       "Cattle and dairy farmers, especially those rearing indigenous breeds"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Not tied to land size — this is a livestock scheme rather than a crop-land scheme.",
@@ -291,9 +380,15 @@
     "eligibility": [
       "Farmers and cattle rearers owning milch or draught animals"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Not tied to land size — this is a livestock insurance scheme.",
@@ -313,9 +408,15 @@
       "Existing micro food-processing units, including farmer-run or FPO-run units",
       "Individual entrepreneurs, Self-Help Groups, FPOs and cooperatives"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Not tied to land size — relevant to farmers doing value-added food processing on their produce.",
@@ -334,9 +435,15 @@
     "eligibility": [
       "Individual farmers, FPOs, cooperatives, agri-entrepreneurs and Self-Help Groups setting up eligible post-harvest infrastructure projects"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Not tied to land size — relevant to farmers investing in shared or individual post-harvest infrastructure.",
@@ -355,9 +462,15 @@
     "eligibility": [
       "Farmers willing to take up bamboo cultivation on their land"
     ],
-    "states": ["All States"],
-    "crops": ["Bamboo"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "Bamboo"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No fixed land-size restriction.",
@@ -376,9 +489,15 @@
     "eligibility": [
       "Farmers who can bring produce to, or are linked with, an e-NAM-integrated mandi"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "No land-size restriction — this is a market-access platform, not a subsidy scheme.",
@@ -397,9 +516,15 @@
     "eligibility": [
       "Farmers with a short-term crop loan, typically via Kisan Credit Card, up to the notified loan limit"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["All Farmers"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
     "min_land_acres": null,
     "max_land_acres": null,
     "land_size_info": "Not tied to land size directly; tied to loan amount instead.",
@@ -419,9 +544,16 @@
       "Small and marginal farmers with landholding up to 2 hectares (about 5 acres), aged 18 to 40",
       "Should not already be covered under another statutory pension scheme or be an income-tax payer"
     ],
-    "states": ["All States"],
-    "crops": ["All Crops"],
-    "farmer_categories": ["Marginal Farmer", "Small Farmer"],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "Marginal Farmer",
+      "Small Farmer"
+    ],
     "min_land_acres": null,
     "max_land_acres": 5,
     "land_size_info": "Restricted to small and marginal farmers holding up to about 5 acres (2 hectares).",
@@ -430,5 +562,28 @@
     "application_process": "Enrol at the nearest Common Service Centre with Aadhaar and bank account details, or self-enrol via the PM-KMY portal.",
     "official_url": "https://maandhan.in/",
     "verify_note": "Pension amount and contribution slabs are fixed by scheme rules — verify current figures before enrolling."
+  },
+  {
+    "name": "Micro irrigation Fund",
+    "short_description": "The Micro Irrigation Fund (MIF), established under NABARD in 2019-20 with an initial corpus of Rs. 5,000 crore and augmented by another Rs. 5,000 crore in 20...",
+    "description": "The Micro Irrigation Fund (MIF), established under NABARD in 2019-20 with an initial corpus of Rs. 5,000 crore and augmented by another Rs. 5,000 crore in 2024, is a government initiative aimed at promoting the adoption of micro irrigation systems such as drip and sprinkler technologies to enhance water-use efficiency and agricultural productivity in India, offering states low-interest loans with a 2% interest subvention to provide farmer subsidies beyond existing PMKSY provisions, with small and marginal farmers receiving a 55% central subsidy and others 45%, supplemented by three years of free maintenance services, facilitating water conservation, improved soil health, labor and power savings, and increased crop yield across states like Karnataka, Andhra Pradesh, Gujarat, Tamil Nadu, and Rajasthan, while enabling innovative irrigation projects, public-private partnerships, and sustainable agriculture development, with farmers applying through FPOs, cooperatives, Water User Associations, or state agencies, making MIF a strategic financial tool for widespread sustainable irrigation adoption.",
+    "benefits": "",
+    "eligibility": [],
+    "states": [
+      "All States"
+    ],
+    "crops": [
+      "All Crops"
+    ],
+    "farmer_categories": [
+      "All Farmers"
+    ],
+    "min_land_acres": null,
+    "max_land_acres": null,
+    "irrigation_required": "Any",
+    "application_process": "See the official scheme website for the current application process.",
+    "official_url": "https://www.nabard.org/content1.aspx?id=1720&catid=8&mid=488",
+    "verify_note": "Added via the plain-text admin form — verify current details on the official website before relying on this scheme.",
+    "id": "21"
   }
 ]

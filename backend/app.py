@@ -25,6 +25,7 @@ import database
 import recommendation
 
 FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend")
+ADMIN_TOKEN = os.environ.get("FARMASCHEMA_ADMIN_TOKEN", "dev-admin-token")
 
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 CORS(app)  # allow requests from any origin, useful if frontend is served separately
@@ -55,6 +56,17 @@ def serve_frontend_file(filename):
 # API routes
 # ---------------------------------------------------------------------------
 
+def require_admin():
+    """Return an error response unless the request has the admin token."""
+    token = request.headers.get("X-Admin-Token", "")
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.lower().startswith("bearer "):
+        token = auth_header[7:].strip()
+
+    if not ADMIN_TOKEN or token != ADMIN_TOKEN:
+        return jsonify({"error": "Admin token is missing or invalid."}), 401
+    return None
+
 @app.route("/api/health")
 def health():
     """Simple check used to confirm the backend is running."""
@@ -73,9 +85,78 @@ def get_scheme_by_id(scheme_id):
     """Return one scheme's full details, or a 404 if the id doesn't exist."""
     schemes = recommendation.load_schemes()
     for scheme in schemes:
-        if scheme["id"] == scheme_id:
+        if str(scheme["id"]) == scheme_id:
             return jsonify(scheme)
     return jsonify({"error": f"No scheme found with id '{scheme_id}'"}), 404
+
+
+@app.route("/api/admin/schemes", methods=["GET", "POST", "PUT"])
+def admin_schemes():
+    """
+    Admin-only scheme database editor.
+
+    Reads/writes backend/data/schemes.json, which is the source used by the
+    recommendation engine and the public scheme pages.
+    """
+    auth_error = require_admin()
+    if auth_error:
+        return auth_error
+
+    if request.method == "GET":
+        schemes = recommendation.load_schemes()
+        return jsonify({"count": len(schemes), "schemes": schemes})
+
+    body = request.get_json(silent=True)
+    if not body or "schemes" not in body:
+        return jsonify({"error": "Request body must be JSON with a 'schemes' object or array."}), 400
+
+    try:
+        if request.method == "POST":
+            schemes, added_schemes = recommendation.append_schemes(body["schemes"])
+            return jsonify({
+                "status": "appended",
+                "count": len(schemes),
+                "added_ids": [scheme["id"] for scheme in added_schemes],
+            })
+
+        recommendation.save_schemes(body["schemes"])
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+
+    return jsonify({"status": "saved", "count": len(body["schemes"])})
+
+
+@app.route("/api/admin/schemes/simple", methods=["POST"])
+def admin_add_simple_scheme():
+    """
+    Plain-text scheme add.
+
+    The admin sends just three plain-text fields: name, description,
+    official_url. No structured JSON, and no parsing of the description
+    paragraph into fields — we store it as-is and let the existing
+    TF-IDF step (recommendation.build_scheme_text) use it directly. See
+    recommendation.build_simple_scheme for the permissive defaults used
+    for the structured fields the rest of the app expects.
+    """
+    auth_error = require_admin()
+    if auth_error:
+        return auth_error
+
+    body = request.get_json(silent=True) or {}
+    name = body.get("name", "")
+    description = body.get("description", "")
+    official_url = body.get("official_url", "")
+
+    try:
+        schemes, added_scheme = recommendation.append_simple_scheme(name, description, official_url)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+
+    return jsonify({
+        "status": "appended",
+        "count": len(schemes),
+        "added_id": added_scheme["id"],
+    })
 
 
 @app.route("/api/recommend", methods=["POST"])
@@ -145,7 +226,7 @@ def bookmark_scheme():
         return jsonify({"error": "client_id and scheme_id are required."}), 400
 
     schemes = recommendation.load_schemes()
-    scheme = next((s for s in schemes if s["id"] == scheme_id), None)
+    scheme = next((s for s in schemes if str(s["id"]) == str(scheme_id)), None)
     if not scheme:
         return jsonify({"error": f"No scheme found with id '{scheme_id}'"}), 404
 
@@ -185,4 +266,4 @@ def server_error(e):
 if __name__ == "__main__":
     # debug=True gives auto-reload and helpful error pages while developing.
     # Turn this off (debug=False) before a live demo if you want cleaner output.
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=int(os.environ.get("PORT", 5000)))

@@ -25,6 +25,7 @@ are calculated independently. This keeps each part small and understandable.
 
 import json
 import os
+import tempfile
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -37,6 +38,186 @@ def load_schemes():
     """Load the list of scheme dictionaries from the JSON data file."""
     with open(SCHEMES_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def save_schemes(schemes):
+    """Persist the scheme list after validating its basic structure."""
+    validate_schemes(schemes)
+
+    data_dir = os.path.dirname(SCHEMES_FILE)
+    os.makedirs(data_dir, exist_ok=True)
+
+    fd, temp_path = tempfile.mkstemp(prefix="schemes-", suffix=".json", dir=data_dir)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(schemes, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+        os.replace(temp_path, SCHEMES_FILE)
+    except Exception:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        raise
+
+
+def append_schemes(new_schemes):
+    """Append one or more schemes to the existing scheme list."""
+    if isinstance(new_schemes, dict):
+        new_schemes = [new_schemes]
+    elif not isinstance(new_schemes, list):
+        raise ValueError("New scheme data must be a JSON object or array.")
+
+    schemes = load_schemes()
+    adjusted_schemes = assign_append_ids(schemes, new_schemes)
+    combined = schemes + adjusted_schemes
+    save_schemes(combined)
+    return combined, adjusted_schemes
+
+
+def assign_append_ids(existing_schemes, new_schemes):
+    """
+    Copy incoming schemes and assign sequential numeric ids before saving.
+
+    Existing seed data uses slug ids, so if there are no numeric ids yet we
+    start from len(existing_schemes) + 1. Once numeric ids exist, the next
+    append continues from the largest numeric id.
+    """
+    next_id = next_numeric_scheme_id(existing_schemes)
+    adjusted = []
+
+    for scheme in new_schemes:
+        if not isinstance(scheme, dict):
+            raise ValueError("Each appended scheme must be an object.")
+
+        adjusted_scheme = dict(scheme)
+        adjusted_scheme["id"] = str(next_id)
+        adjusted.append(adjusted_scheme)
+        next_id += 1
+
+    return adjusted
+
+
+def build_simple_scheme(name, description, official_url):
+    """
+    Build a full scheme record from just the three plain-text fields an
+    admin types in on the "Add a scheme" form: name, description,
+    official_url.
+
+    IMPORTANT — this is the "plain text, no structured parsing" path:
+    we do NOT read the description paragraph and try to figure out its
+    state/crop/benefit/eligibility fields. That would be structured
+    parsing (OCR/NLP/LLM extraction), which this project deliberately
+    skips. Instead:
+      - The description is stored exactly as the admin typed it, and is
+        the text the TF-IDF step (build_scheme_text) uses directly.
+      - Every structured field the rest of the app expects (states,
+        crops, farmer_categories, etc.) gets a permissive default
+        instead of being guessed at, so this scheme still shows up for
+        farmers rather than silently being excluded.
+    An admin who wants precise structured fields can still use the
+    "Advanced: structured JSON" option below to set them manually.
+    """
+    name = (name or "").strip()
+    description = (description or "").strip()
+    official_url = (official_url or "").strip()
+
+    if not name:
+        raise ValueError("Scheme name is required.")
+    if not description:
+        raise ValueError("Scheme description is required.")
+
+    short_description = (
+        description if len(description) <= 160
+        else description[:157].rstrip() + "..."
+    )
+
+    return {
+        "name": name,
+        "short_description": short_description,
+        "description": description,
+        "benefits": "",
+        "eligibility": [],
+        "states": ["All States"],
+        "crops": ["All Crops"],
+        "farmer_categories": ["All Farmers"],
+        "min_land_acres": None,
+        "max_land_acres": None,
+        "irrigation_required": "Any",
+        "application_process": "See the official scheme website for the current application process.",
+        "official_url": official_url,
+        "verify_note": (
+            "Added via the plain-text admin form — verify current details "
+            "on the official website before relying on this scheme."
+        ),
+    }
+
+
+def append_simple_scheme(name, description, official_url):
+    """Plain-text add: build a full scheme record, then append it like any other."""
+    scheme = build_simple_scheme(name, description, official_url)
+    schemes, added_schemes = append_schemes(scheme)
+    return schemes, added_schemes[0]
+
+
+def next_numeric_scheme_id(schemes):
+    """Return the next id number after the largest numeric scheme id."""
+    numeric_ids = []
+
+    for scheme in schemes:
+        scheme_id = scheme.get("id") if isinstance(scheme, dict) else None
+        if isinstance(scheme_id, int):
+            numeric_ids.append(scheme_id)
+        elif isinstance(scheme_id, str) and scheme_id.isdigit():
+            numeric_ids.append(int(scheme_id))
+
+    if numeric_ids:
+        return max(numeric_ids) + 1
+    return len(schemes) + 1
+
+
+def validate_schemes(schemes):
+    """Keep the admin editor from saving malformed scheme data."""
+    if not isinstance(schemes, list):
+        raise ValueError("Scheme data must be a JSON array.")
+
+    required_fields = [
+        "id",
+        "name",
+        "short_description",
+        "description",
+        "benefits",
+        "eligibility",
+        "states",
+        "crops",
+        "farmer_categories",
+        "application_process",
+        "official_url",
+    ]
+    list_fields = ["eligibility", "states", "crops", "farmer_categories"]
+    seen_ids = set()
+
+    for index, scheme in enumerate(schemes, start=1):
+        if not isinstance(scheme, dict):
+            raise ValueError(f"Scheme #{index} must be an object.")
+
+        missing = [field for field in required_fields if field not in scheme]
+        if missing:
+            raise ValueError(f"Scheme #{index} is missing: {', '.join(missing)}.")
+
+        scheme_id = str(scheme.get("id", "")).strip()
+        if not scheme_id:
+            raise ValueError(f"Scheme #{index} must have a non-empty id.")
+        if scheme_id in seen_ids:
+            raise ValueError(f"Duplicate scheme id: {scheme_id}.")
+        seen_ids.add(scheme_id)
+
+        for field in list_fields:
+            if not isinstance(scheme.get(field), list):
+                raise ValueError(f"Scheme '{scheme_id}' field '{field}' must be a list.")
+
+        for field in ("min_land_acres", "max_land_acres"):
+            value = scheme.get(field)
+            if value is not None and not isinstance(value, (int, float)):
+                raise ValueError(f"Scheme '{scheme_id}' field '{field}' must be a number or null.")
 
 
 def classify_land_category(land_size_acres):
